@@ -235,3 +235,7 @@ delete all AWS resources and avoid ongoing charges.
 - [x] GitHub Actions CI/CD pipeline
 - [x] Architecture diagram
 - [x] README with design decisions, trade-offs, and cost awareness
+
+## This is the ip for the static website i hosted using html 
+-> http://13.126.97.24/
+
