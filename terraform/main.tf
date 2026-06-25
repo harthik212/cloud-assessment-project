@@ -73,6 +73,7 @@ resource "aws_iam_instance_profile" "ec2_profile" {
 resource "aws_instance" "web" {
   ami                  = data.aws_ami.amazon_linux.id
   instance_type        = var.instance_type
+  key_name             = var.key_name
   security_groups      = [aws_security_group.web_sg.name]
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
   user_data = <<-USERDATA
