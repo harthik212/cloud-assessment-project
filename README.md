@@ -11,7 +11,7 @@ and the deployment pipeline is automated with GitHub Actions.
 
 | Component | Technology |
 | --- | --- |
-| Application | Static site (HTML) |
+| Application | Static site (HTML,CSS,JS) |
 | Cloud Provider | AWS (ap-south-1 / Mumbai) |
 | Virtual Machine | EC2 t3.micro (Amazon Linux 2023) |
 | Web Server | Nginx |
@@ -227,7 +227,7 @@ delete all AWS resources and avoid ongoing charges.
 
 ## Final Checklist
 
-- [x] Simple static website (HTML)
+- [x] Simple static website (HTML,CSS,JS)
 - [x] Terraform code for infrastructure provisioning
 - [x] EC2 virtual machine with public HTTP access
 - [x] Security group allowing HTTP (port 80) and SSH (port 22)
@@ -237,5 +237,5 @@ delete all AWS resources and avoid ongoing charges.
 - [x] README with design decisions, trade-offs, and cost awareness
 
 ## This is the ip for the static website i hosted using html 
--> http://13.126.97.24/
+-> http://43.205.236.36/
 
