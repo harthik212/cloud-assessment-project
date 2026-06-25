@@ -1,0 +1,131 @@
+name: Deploy Website on AWS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Choose apply to deploy or destroy to remove AWS resources"
+        required: true
+        default: "apply"
+        type: choice
+        options:
+          - apply
+          - destroy
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloud-assessment-terraform
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: ap-south-1
+  TF_IN_AUTOMATION: true
+
+jobs:
+  deploy:
+    name: Terraform and deploy site
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: Create Terraform state bucket
+        run: |
+          ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          STATE_BUCKET="cloud-assessment-tfstate-${ACCOUNT_ID}-${AWS_REGION}"
+
+          if ! aws s3api head-bucket --bucket "$STATE_BUCKET" 2>/dev/null; then
+            aws s3api create-bucket \
+              --bucket "$STATE_BUCKET" \
+              --region "$AWS_REGION" \
+              --create-bucket-configuration LocationConstraint="$AWS_REGION"
+
+            aws s3api put-bucket-versioning \
+              --bucket "$STATE_BUCKET" \
+              --versioning-configuration Status=Enabled
+
+            aws s3api put-public-access-block \
+              --bucket "$STATE_BUCKET" \
+              --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
+          fi
+
+          echo "STATE_BUCKET=$STATE_BUCKET" >> "$GITHUB_ENV"
+
+      - name: Terraform init
+        working-directory: terraform
+        run: |
+          terraform init \
+            -backend-config="bucket=${STATE_BUCKET}" \
+            -backend-config="key=cloud-assessment/terraform.tfstate" \
+            -backend-config="region=${AWS_REGION}"
+
+      - name: Terraform validate
+        working-directory: terraform
+        run: terraform validate
+
+      - name: Terraform apply
+        if: ${{ github.event.inputs.action != 'destroy' }}
+        working-directory: terraform
+        run: terraform apply -auto-approve -var="key_name=${{ secrets.EC2_KEY_NAME }}"
+
+      - name: Terraform destroy
+        if: ${{ github.event.inputs.action == 'destroy' }}
+        working-directory: terraform
+        run: terraform destroy -auto-approve -var="key_name=${{ secrets.EC2_KEY_NAME }}"
+
+      - name: Read Terraform outputs
+        if: ${{ github.event.inputs.action != 'destroy' }}
+        working-directory: terraform
+        run: |
+          EC2_HOST=$(terraform output -raw public_ip)
+          echo "EC2_HOST=$EC2_HOST" >> "$GITHUB_ENV"
+          echo "SITE_URL=http://$EC2_HOST" >> "$GITHUB_ENV"
+
+      - name: Configure SSH key
+        if: ${{ github.event.inputs.action != 'destroy' }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Wait for EC2 SSH
+        if: ${{ github.event.inputs.action != 'destroy' }}
+        run: |
+          for i in {1..30}; do
+            if ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ec2-user@"$EC2_HOST" "echo ready"; then
+              exit 0
+            fi
+            sleep 10
+          done
+          exit 1
+
+      - name: Deploy app files to EC2
+        if: ${{ github.event.inputs.action != 'destroy' }}
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@"$EC2_HOST" "sudo dnf install -y nginx && sudo systemctl enable --now nginx && rm -rf ~/cloud-assessment-site && mkdir -p ~/cloud-assessment-site"
+          scp -o StrictHostKeyChecking=no -r app/* ec2-user@"$EC2_HOST":~/cloud-assessment-site/
+          ssh -o StrictHostKeyChecking=no ec2-user@"$EC2_HOST" "sudo rm -rf /usr/share/nginx/html/* && sudo cp -r ~/cloud-assessment-site/. /usr/share/nginx/html/ && sudo systemctl restart nginx"
+
+      - name: Verify website
+        if: ${{ github.event.inputs.action != 'destroy' }}
+        run: |
+          curl --fail --retry 6 --retry-delay 10 "$SITE_URL"
+          echo "Website URL: $SITE_URL"
