@@ -1,19 +1,329 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cloud Assessment Project</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Portfolio | Harthik Surya</title>
+
     <link rel="stylesheet" href="styles.css">
-    <script src="app.js" defer></script>
-  </head>
-  <body>
-    <main class="card">
-      <h1>Cloud Assessment Project</h1>
-      <p>This static website is deployed on an AWS EC2 virtual machine.</p>
-      <p>Infrastructure is created with Terraform and served publicly using Nginx on port 80.</p>
-      <span class="badge">Live on AWS</span>
-      <p id="message" class="small"></p>
-    </main>
-  </body>
+    <script defer src="app.js"></script>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <h2>Cloud Portfolio</h2>
+
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<section id="home" class="hero">
+
+<div class="hero-content">
+
+<h1>Hi, I'm <span>Harthik Surya</span></h1>
+
+<h3>Cloud Engineer | AWS | Terraform | DevOps</h3>
+
+<p>
+
+Building scalable cloud infrastructure using AWS,
+Terraform, GitHub Actions, Linux and Infrastructure as Code.
+
+</p>
+
+<a href="#projects" class="btn">
+View My Projects
+</a>
+
+</div>
+
+</section>
+
+
+
+<section id="about">
+
+<div class="container">
+
+<h2>About Me</h2>
+
+<p>
+
+I'm a Computer Science undergraduate passionate about Cloud Computing,
+AWS Infrastructure, DevOps and Infrastructure as Code.
+
+This portfolio showcases AWS projects built using Terraform,
+GitHub Actions, Linux, IAM, EC2, S3, Lambda and modern cloud services.
+
+</p>
+
+</div>
+
+</section>
+
+
+
+<section id="projects">
+
+<div class="container">
+
+<h2>Cloud Projects</h2>
+
+<div class="cards">
+
+
+<div class="card">
+
+<h3>Cloud Assessment Project</h3>
+
+<p>
+
+Provisioned AWS infrastructure using Terraform.
+
+Created EC2, IAM Roles, Security Groups and deployed
+a static website using GitHub Actions CI/CD pipeline.
+
+</p>
+
+<div class="tech">
+
+<span>AWS EC2</span>
+<span>Terraform</span>
+<span>GitHub Actions</span>
+<span>Nginx</span>
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>AWS 3-Tier Architecture</h3>
+
+<p>
+
+Designed and deployed a secure three-tier web application
+using VPC, Public & Private Subnets, Application Load Balancer,
+EC2 Auto Scaling and RDS.
+
+</p>
+
+<div class="tech">
+
+<span>VPC</span>
+<span>EC2</span>
+<span>RDS</span>
+<span>ALB</span>
+
+</div>
+
+</div>
+
+
+
+
+<div class="card">
+
+<h3>LAMP Stack Deployment</h3>
+
+<p>
+
+Configured Apache, MySQL and PHP on Amazon EC2.
+
+Hosted a dynamic web application while implementing
+Linux administration and web server configuration.
+
+</p>
+
+<div class="tech">
+
+<span>Linux</span>
+<span>Apache</span>
+<span>MySQL</span>
+<span>PHP</span>
+
+</div>
+
+</div>
+
+
+
+
+<div class="card">
+
+<h3>Serverless Web Application</h3>
+
+<p>
+
+Built a fully serverless application using
+AWS Lambda, API Gateway, DynamoDB and S3
+providing scalable and cost-effective architecture.
+
+</p>
+
+<div class="tech">
+
+<span>Lambda</span>
+<span>API Gateway</span>
+<span>DynamoDB</span>
+<span>S3</span>
+
+</div>
+
+</div>
+
+
+
+</div>
+
+</div>
+
+</section>
+
+
+
+
+<section id="skills">
+
+<div class="container">
+
+<h2>Technical Skills</h2>
+
+<div class="skills-grid">
+
+<div>AWS EC2</div>
+
+<div>Amazon S3</div>
+
+<div>IAM</div>
+
+<div>VPC</div>
+
+<div>Route53</div>
+
+<div>CloudFront</div>
+
+<div>Lambda</div>
+
+<div>API Gateway</div>
+
+<div>DynamoDB</div>
+
+<div>Terraform</div>
+
+<div>GitHub Actions</div>
+
+<div>Linux</div>
+
+<div>Nginx</div>
+
+<div>Docker</div>
+
+<div>Git</div>
+
+<div>Bash</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+
+
+<section id="architecture">
+
+<div class="container">
+
+<h2>Deployment Architecture</h2>
+
+<div class="architecture">
+
+<div class="step">
+
+<h3>Developer</h3>
+
+<p>Pushes Code</p>
+
+</div>
+
+<div class="arrow">➜</div>
+
+<div class="step">
+
+<h3>GitHub</h3>
+
+<p>Repository</p>
+
+</div>
+
+<div class="arrow">➜</div>
+
+<div class="step">
+
+<h3>GitHub Actions</h3>
+
+<p>CI/CD Pipeline</p>
+
+</div>
+
+<div class="arrow">➜</div>
+
+<div class="step">
+
+<h3>Terraform</h3>
+
+<p>Provision AWS Infrastructure</p>
+
+</div>
+
+<div class="arrow">➜</div>
+
+<div class="step">
+
+<h3>AWS EC2</h3>
+
+<p>Nginx Hosts Website</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+
+<footer>
+
+<p>
+
+© 2026 Harthik Surya
+
+<br>
+
+AWS • Terraform • GitHub Actions • Linux • DevOps
+
+</p>
+
+</footer>
+
+</body>
+
 </html>
