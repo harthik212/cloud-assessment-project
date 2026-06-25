@@ -11,9 +11,9 @@ and the deployment pipeline is automated with GitHub Actions.
 
 | Component | Technology |
 | --- | --- |
-| Application | Static site (HTML, CSS, JavaScript) |
+| Application | Static site (HTML) |
 | Cloud Provider | AWS (ap-south-1 / Mumbai) |
-| Virtual Machine | EC2 t2.micro (Amazon Linux 2023) |
+| Virtual Machine | EC2 t3.micro (Amazon Linux 2023) |
 | Web Server | Nginx |
 | Infrastructure as Code | Terraform |
 | CI/CD Pipeline | GitHub Actions |
@@ -21,7 +21,7 @@ and the deployment pipeline is automated with GitHub Actions.
 
 ## Architecture
 
-![Architecture Diagram](docs/architecture.png)
+![Architecture Diagram]
 
 ### Flow
 
