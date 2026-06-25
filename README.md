@@ -227,7 +227,7 @@ delete all AWS resources and avoid ongoing charges.
 
 ## Final Checklist
 
-- [x] Simple static website (HTML, CSS, JS)
+- [x] Simple static website (HTML)
 - [x] Terraform code for infrastructure provisioning
 - [x] EC2 virtual machine with public HTTP access
 - [x] Security group allowing HTTP (port 80) and SSH (port 22)
